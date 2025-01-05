@@ -1,0 +1,27 @@
+services:
+  azure-api:
+    image: azure-api-image
+    container_name: azure-api-container
+    environment:
+      ASPNETCORE_ENVIRONMENT: Staging
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8000:5059
+    restart: on-failure
+
+  azure-staging-database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: azure-staging-database-container
+    environment:
+      MSSQL_SA_PASSWORD: "4zureD0ckerD4t4b4s3"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - staging_mssql_data:/var/lib/mssql
+    restart: on-failure
+  
+volumes:
+  staging_mssql_data:
